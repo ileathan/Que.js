@@ -12,7 +12,7 @@ myQue.run(data)
 
 **2.)** Go backwards in the que `next(-4)` would go back 4.
 
-**3.)** Inject a `Promise` at a particular que index.
+**3.)** Inject a `Promise` at a particular que index `next({inject:4,promise:Promise})`.
 
 **4.)** Quit after at specified index `next({quit:4}` quits after 4 more iterations.
 
