@@ -18,7 +18,7 @@ myQue.run(data)
 
 **5.)** Allows removing functions by index, variable name, or raw text.
 
-**.6)** A fill method for convenience.
+**6.)** A fill method for convenience.
 
 The above code snippet illustrates how simple it would be to execute 5 asynchronous functions in succession that all operate on the same data. Just make sure each function calls `next()` to proceed or `next(0)` to quit early.
 
