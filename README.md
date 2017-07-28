@@ -24,17 +24,23 @@ que.add((data, next) => {
   data.msg += ' THREE';
   next()
 });
-que.add(function(data, next) {
+
+function myFn1(data, next) {
   data.msg += ' FOUR';
    // You can go backwards in the que.
    if(once) { once = false; next(-2); }
    // You can go forwards in the que.
    else next(1);
-});
-que.add(function(data, next) {
+}
+
+function mFn2(data, next) {
   data.msg += ' FIVE';
   next();
-});
+}
+
+// You can add multiple functions at a time.
+que.add([myFn1, myFn2]) 
+
 que.run({msg: 'ZERO'})
   .then(res => console.log(res.msg))
   .catch(err => console.log('Woopsie! ' + err))
