@@ -1,5 +1,5 @@
 # enQue.js
-Chain asynchronous functions in succession, comsuming the same data stream.
+Chain asynchronous functions in succession, consuming the same data stream.
 
 ```javascript
 const enQue = new require('enQue')
