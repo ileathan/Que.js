@@ -4,7 +4,12 @@ Enable queing asynchronous functions one after the other.
 ```javascript
 // USAGE EXAMPLE
 const que = new Que();
+
+// Used to only go backwards once, otherwise you end up in an infinite cycle.
+// IF YOU GO FORWARD IN THE QUE YOU CANNOT GO BACKWARDS TO A PLACE NOT ON THE NEW QUE
+// It will throw a error if you attempt to go forward then backwards.
 var once = true;
+
 que.add((data, next, done, index) => {
   //return done(); // You can return early if you'd like
   setTimeout(()=>{
