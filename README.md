@@ -30,6 +30,10 @@ myQue.run()
 
 ```npm install enque```
 
+# Dependencies
+
+None.
+
 # Usage example
 
 ```javascript
