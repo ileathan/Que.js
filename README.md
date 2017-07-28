@@ -6,19 +6,18 @@ Enable queing asynchronous functions one after the other.
 const que = new Que();
 var once = true;
 que.add(function(data, next, done, index) {
-   console.log("My position in the Que stack is " + index + ".")
   //return done(); // You can return early if you'd like
   setTimeout(()=>{
     data.msg += ' ONE';
-    next({test:1, promise: new Promise((s,e)=>{data.msg += " WORKED "; s(data) }) });
-  }, 50)
+    next({inject:1, promise: new Promise((s,e)=>{data.msg += " ONE AND A HALF"; s(data) }) });
+  }, 9000)
 });
 que.add(function(data, next) {
   setTimeout(()=>{
     //throw "errors work too" // You can throw an error and reject the promise
     data.msg += ' TWO';
     next();
-  }, 10)
+  }, 4000)
 });
 que.add(function(data, next) {
   data.msg += ' THREE';
@@ -36,4 +35,10 @@ que.add(function(data, next) {
 que.run({msg: 'ZERO'})
   .then(res => console.log(res.msg))
   .catch(err => console.log('Woopsie! ' + err))
+```
+
+The above code when executed prints
+
+```
+ONE ONE AND A HALF TWO THREE FOUR TWO THREE FOUR FIVE
 ```
