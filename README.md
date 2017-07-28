@@ -16,6 +16,10 @@ myQue.run(data)
 
 **4.)** Quit after at specified index `next({quit:4}` quits after 4 more iterations.
 
+**5.)** Allows removing functions by index, variable name, or raw text.
+
+**.6)** A fill method for convenience.
+
 The above code snippet illustrates how simple it would be to execute 5 asynchronous functions in succession that all operate on the same data. Just make sure each function calls `next()` to proceed or `next(0)` to quit early.
 
 Since a promise is returned it is always best to attach a `.then()` and `.catch()` so the above code would become.
