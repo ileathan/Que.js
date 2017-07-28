@@ -8,13 +8,13 @@ myQue.run(data)
 ```
 # Features
 
-1.) Skip ahead in the que `next(4)` would skip to position 4.
+**1.)** Skip ahead in the que `next(4)` would skip to position 4.
 
-2.) Go backwards in the que `next(-4)` would go back 4.
+**2.)** Go backwards in the que `next(-4)` would go back 4.
 
-3.) Inject a `Promise` at a particular que index.
+**3.)** Inject a `Promise` at a particular que index.
 
-4.) Quit after at specified index `next({quit:4}` quits after 4 more iterations.
+**4.)** Quit after at specified index `next({quit:4}` quits after 4 more iterations.
 
 The above code snippet illustrates how simple it would be to execute 5 asynchronous in functions in succession that all operate on the same data. Just make sure each function calls `next()` to proceed or `next(0)` to quit early.
 
