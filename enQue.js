@@ -3,72 +3,79 @@
 // License MIT
 'use strict'
 
-// Construct a new enQue object
+// **Constructor** Creates a new enQue object.
+// `que = new enQue([function1, function2, function3])`
+// You can also create an empty object via `new enQue()`
 function enQue(init) {
-  // Default to an empty array
   this.que = [];
-  // **if** passed a parameter assume its an array
-  // and add use the add method to add all elements.
   if(init) this.add(init);
+  // __returns itself for use in chaining__
+  return this;
 }
 
-// Fill an enQue object with n functions.
+// **enQue.fill** Fills an enQue object with `fn` `n` times.
+// `que.fill((_,n)=>{console.log('works');n()}, 7)`
+// running that que will display 'works' 7 times.
 enQue.prototype.fill = function(fn, n) {
   for(let i = 0; i < n; i++) {
     this.que.push(fn);
   }
-  // assume no problems and return n.
-  return n;
+  // __returns itself for use in chaining__
+  return this;
 }
 
+// **enQue.add** Adds `fn` to the enQue object.
+// `que.add((_,n,__,i)=>{console.log(i)})` or you can
+// specify an array of functions `que.add([fn1, fn1])`
 enQue.prototype.add = function(fn) {
-  // If argument is array loop through it
-  // adding every item to our que.
   if(fn.constructor.name === 'Array') {
-    let l = fn.length
-    for(let i = 0; i < l; i++) {
+    for(let i = 0, l = fn.length; i < l; i++) {
       this.que.push(fn[i])
     }
-    return l;
   }
-  // returns the amount of added fns.
-  return this.que.push(fn) ? 1 : 0;
+  // __returns itself for use in chaining__
+  return this;
 }
 
-// clears all function elements fromt he array.
+// **enQue.clear** Clears all functions from the que
+// `que.clear()`
 enQue.prototype.clear = function(fn) {
-  return this.que = [];
+  return this;
+  // __returns itself for use in chaining__
 }
 
+// **enQue.remove** Removes an item from the que.
+// `que.remove("(_,n,__,i)=>{console.log(i)}")`
+// `que.remove(fn1, 2)` or `que.remove(7)`
 // `item` can be a `String`, `Function ref`, or `Number`.
 // `amount` is the amount of found `item`'s to remove
 // if its not specified **all** `item`s found are removed.
 enQue.prototype.remove = function(item, amount) {
+  // Here we extract the items type.
   type = item.constructor.name;
-  // If item is a number just remove that element and return.
   if(type === 'Number') {
     return this.que.splice(item, 1);
   }
   else {
-    // Otherwise check if its a `Function` or an `String`
-    // and loop through the que checking each element
-    type === 'Function' ? check = item : check = item.toString();
-    total = amount || Infinity;
-    result = [];
-    removed = 0;
+    let check = type === 'Function' ? item : item.toString();
+    amount = amount || Infinity;
+    let removed = 0;
     for(i=0; i<this.que.length; i++) {
       // Make sure we dont remove more than amount!
-      if(total > amount) break;
+      if(removed === amount) break;
       if(check === item) {
-        result.push(this.que.splice(i, 1));
+        this.que.splice(i, 1);
         removed++;
       }
     }
-    // returns the array of removed elements
-    return result;
+    // __returns itself for use in chaining__
+    return this;
   }
 }
 
+// **executeQue** Executes the que, you should not need to call
+// this function directly, but on the offchance you need to
+// bypass the promise system its avialable `que.executeQue()`
 enQue.prototype.executeQue = function(data, done) {
   // Allow ques that dont need to consume data.
   if(!data) data = {};
@@ -76,27 +83,26 @@ enQue.prototype.executeQue = function(data, done) {
   var orig = done;
   // `i` is our iterator, quit/inject check if we need to quit/inject `Promise`.
   var i = 0, quit = false, inject = false;
-console.log(1)
-  // Perform nesting.
+  // The reduceRight function allows us to itterate through the que while constantly
+  // nesting callbacks using the accumulator, it has very reasonable performance.
   this.que.reduceRight((done, next) =>
-    // Options can be any operation to perform while nesting callbacks.
-    // Currently options must be a specific `JSON Object`, or a `Number`, if its JSON
-    // then it needs a `quit` or `inject` property. Otherwise **0** terminates que,
-    // exposing the data immitiadtly. A negative Number sends the data
-    // to backwards in the que (to a new que **techincally**), Positive Numbers
-    // send the data forward, bellow var i is current callback index being nested.
     options => {
-      // check if options is object, the first iteration is always data obj, so skip it.
+      // Options can be any operation to perform while nesting callbacks.
+      // Currently options must be a specific `JSON Object`, or a `Number`, if its JSON
+      // then it needs a `quit` or `inject` property. Otherwise **0** terminates que,
+      // exposing the data immitiadtly. A negative Number sends the data
+      // to backwards in the que (to a new que **techincally**), Positive Numbers
+      // send the data forward, bellow var i is current callback index being nested.
       if(options !== data && options === Object(options)) {
         if((!options.promise && !options.inject) && !options.quit)
-          throw `${options} is not supported, valid fomat could be +n, -n, 0, or, {quit:+n}, {inject:+n,promise:Promise}`
+          throw new Error(`${options} is not supported, valid fomat could be +n, -n, 0, or, {quit:+n}, {inject:+n,promise:Promise}`)
         else if(options.quit)
           quit = i + options.quit;
         else if(options.inject)
           inject = i + options.inject;
       }
       else if(options !== data && options) {
-        // create temp que to hold our new que.
+        // creates a temp que to hold our new que.
         tmpQue = [];
         // let `j` be the position we are skipping to.
         // lets say `next(-3)` was passed, so `options = -3`.
@@ -109,24 +115,25 @@ console.log(1)
         for(let l = this.que.length; j < l; j++) {
           tmpQue.push(this.que[j])
         }
-        // set new que.
+        // sets the que to the one we just built.
         this.que = tmpQue;
-        // Apend the original data exposure callback.
+        // Apends the original data exposure callback.
         this.que.push(orig)
         this.executeQue(data);
-        // Make sure the current execution goes nowhere.
+        // Makes sure the current execution goes nowhere.
         done = ()=>{}
         next = ()=>{}
       }
-      // if quit is specified, check if we need to quit
-      // and if so set next to resolve data, else increment checker.
+      // if quit is specified, checks if we need to quit
+      // and if so sets `next` to resolve `data`, otherwise increments
+      // the checker variable.
       if(quit) {
         if(quit > i) { next = orig; quit = false }
         else quit++
       }
-      // if inject is specified, check if we need to inject
-      // a promise if so set wait for resolve then call next,
-      // otherwise increment checker and call next.
+      // if inject is specified, checks if we need to inject
+      // the `Promise` if so waits for promsise resolution and then
+      // calls `next`, otherwise increment checker and call next.
       if(inject) {
         if(inject > i) {
           options.promise.then(data => {
@@ -137,26 +144,29 @@ console.log(1)
           next(done, data, orig, i++)
         }
       } else {
-        // no special object options were specified just proceed.
+        // no special object options were specified just proceeds.
         next(data, done, orig, i++)
       }
     }
-  // set our initial accumulator to function done.
-  // which merely resolves the data, exposing it.
-  // Meaning the result will be a function
-  // so call it instantly with data.
+  // this sets our initial accumulator to the function done each successive call
+  // then creates another function callback nest where the old `done` becomes the callback
+  // of the new `done` the original `done` passed in here does nothing more then resolve the
+  // data. which is passed in immidiatle (our reduceRight returns the accumulator function)
   , done)(data);
 }
 
+// **enQue.run** Creates a promise which resolves when the que ends.
+// `que.run(data)` or for ques that dont consume data `que.run()`
+// Since a promise is returns you should then call `.then(data=>{})`
+// and `.catch(error=>{})`
 enQue.prototype.run = function(data) {
-  // Returns a promise that resolves if the
-  // exection of the que yeilded no errors.
   return new Promise((resolve, reject) => {
     try {
       this.executeQue(data, () => resolve(data));
     } catch(error) {
       reject(error);
     }
+  // __returns a promise which can be used for chaining__
   })
 }
 

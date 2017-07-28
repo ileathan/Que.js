@@ -44,11 +44,15 @@ License MIT</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Construct a new enQue object</p>
+              <p><strong>Constructor</strong> Creates a new enQue object.
+<code>que = new enQue([function1, function2, function3])</code>
+You can also create an empty object via <code>new enQue()</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">enQue</span>(<span class="hljs-params">init</span>) </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">enQue</span>(<span class="hljs-params">init</span>) </span>{
+  <span class="hljs-keyword">this</span>.que = [];
+  <span class="hljs-keyword">if</span>(init) <span class="hljs-keyword">this</span>.add(init);</pre></div></div>
             
         </li>
         
@@ -59,11 +63,12 @@ License MIT</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Default to an empty array</p>
+              <p><strong>returns itself for use in chaining</strong></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.que = [];</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+}</pre></div></div>
             
         </li>
         
@@ -74,24 +79,9 @@ License MIT</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p><strong>if</strong> passed a parameter assume its an array
-and add use the add method to add all elements.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span>(init) <span class="hljs-keyword">this</span>.add(init);
-}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>Fill an enQue object with n functions.</p>
+              <p><strong>enQue.fill</strong> Fills an enQue object with <code>fn</code> <code>n</code> times.
+<code>que.fill((_,n)=&gt;{console.log(&#39;works&#39;);n()}, 7)</code>
+running that que will display ‘works’ 7 times.</p>
 
             </div>
             
@@ -103,20 +93,40 @@ and add use the add method to add all elements.</p>
         </li>
         
         
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><strong>returns itself for use in chaining</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+}</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>assume no problems and return n.</p>
+              <p><strong>enQue.add</strong> Adds <code>fn</code> to the enQue object.
+<code>que.add((_,n,__,i)=&gt;{console.log(i)})</code> or you can
+specify an array of functions <code>que.add([fn1, fn1])</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> n;
-}
-
-enQue.prototype.add = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fn</span>) </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>enQue.prototype.add = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fn</span>) </span>{
+  <span class="hljs-keyword">if</span>(fn.constructor.name === <span class="hljs-string">'Array'</span>) {
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>, l = fn.length; i &lt; l; i++) {
+      <span class="hljs-keyword">this</span>.que.push(fn[i])
+    }
+  }</pre></div></div>
             
         </li>
         
@@ -127,18 +137,12 @@ enQue.prototype.add = <span class="hljs-function"><span class="hljs-keyword">fun
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>If argument is array loop through it
-adding every item to our que.</p>
+              <p><strong>returns itself for use in chaining</strong></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span>(fn.constructor.name === <span class="hljs-string">'Array'</span>) {
-    <span class="hljs-keyword">let</span> l = fn.length
-    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; l; i++) {
-      <span class="hljs-keyword">this</span>.que.push(fn)
-    }
-    <span class="hljs-keyword">return</span> l;
-  }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+}</pre></div></div>
             
         </li>
         
@@ -149,12 +153,13 @@ adding every item to our que.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>returns the amount of added fns.</p>
+              <p><strong>enQue.clear</strong> Clears all functions from the que
+<code>que.clear()</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.que.push(fn) ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>;
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>enQue.prototype.clear = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fn</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;</pre></div></div>
             
         </li>
         
@@ -165,13 +170,11 @@ adding every item to our que.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>clears all function elements fromt he array.</p>
+              <p><strong>returns itself for use in chaining</strong></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>enQue.prototype.clear = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fn</span>) </span>{
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.que = [];
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>}</pre></div></div>
             
         </li>
         
@@ -182,14 +185,16 @@ adding every item to our que.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p><code>item</code> can be a <code>String</code>, <code>Function ref</code>, or <code>Number</code>.
+              <p><strong>enQue.remove</strong> Removes an item from the que.
+<code>que.remove(&quot;(_,n,__,i)=&gt;{console.log(i)}&quot;)</code>
+<code>que.remove(fn1, 2)</code> or <code>que.remove(7)</code>
+<code>item</code> can be a <code>String</code>, <code>Function ref</code>, or <code>Number</code>.
 <code>amount</code> is the amount of found <code>item</code>‘s to remove
 if its not specified <strong>all</strong> <code>item</code>s found are removed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>enQue.prototype.remove = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">item, amount</span>) </span>{
-  type = item.constructor.name;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>enQue.prototype.remove = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">item, amount</span>) </span>{</pre></div></div>
             
         </li>
         
@@ -200,14 +205,19 @@ if its not specified <strong>all</strong> <code>item</code>s found are removed.<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>If item is a number just remove that element and return.</p>
+              <p>Here we extract the items type.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span>(type === <span class="hljs-string">'Number'</span>) {
+            <div class="content"><div class='highlight'><pre>  type = item.constructor.name;
+  <span class="hljs-keyword">if</span>(type === <span class="hljs-string">'Number'</span>) {
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.que.splice(item, <span class="hljs-number">1</span>);
   }
-  <span class="hljs-keyword">else</span> {</pre></div></div>
+  <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">let</span> check = type === <span class="hljs-string">'Function'</span> ? item : item.toString();
+    amount = amount || <span class="hljs-literal">Infinity</span>;
+    <span class="hljs-keyword">let</span> removed = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-keyword">this</span>.que.length; i++) {</pre></div></div>
             
         </li>
         
@@ -218,16 +228,16 @@ if its not specified <strong>all</strong> <code>item</code>s found are removed.<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Otherwise check if its a <code>Function</code> or an <code>String</code>
-and loop through the que checking each element</p>
+              <p>Make sure we dont remove more than amount!</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    type === <span class="hljs-string">'Function'</span> ? check = item : check = item.toString();
-    total = amount || <span class="hljs-literal">Infinity</span>;
-    result = [];
-    removed = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-keyword">this</span>.que.length; i++) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(removed === amount) <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">if</span>(check === item) {
+        <span class="hljs-keyword">this</span>.que.splice(i, <span class="hljs-number">1</span>);
+        removed++;
+      }
+    }</pre></div></div>
             
         </li>
         
@@ -238,16 +248,13 @@ and loop through the que checking each element</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Make sure we dont remove more than amount!</p>
+              <p><strong>returns itself for use in chaining</strong></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(total &gt; amount) <span class="hljs-keyword">break</span>;
-      <span class="hljs-keyword">if</span>(check === item) {
-        result.push(<span class="hljs-keyword">this</span>.que.splice(i, <span class="hljs-number">1</span>));
-        removed++;
-      }
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+}</pre></div></div>
             
         </li>
         
@@ -258,15 +265,13 @@ and loop through the que checking each element</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>returns the array of removed elements</p>
+              <p><strong>executeQue</strong> Executes the que, you should not need to call
+this function directly, but on the offchance you need to
+bypass the promise system its avialable <code>que.executeQue()</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> result;
-  }
-}
-
-enQue.prototype.executeQue = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data, done</span>) </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>enQue.prototype.executeQue = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data, done</span>) </span>{</pre></div></div>
             
         </li>
         
@@ -322,11 +327,13 @@ enQue.prototype.executeQue = <span class="hljs-function"><span class="hljs-keywo
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>Perform nesting.</p>
+              <p>The reduceRight function allows us to itterate through the que while constantly
+nesting callbacks using the accumulator, it has very reasonable performance.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.que.reduceRight(<span class="hljs-function">(<span class="hljs-params">done, next</span>) =&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.que.reduceRight(<span class="hljs-function">(<span class="hljs-params">done, next</span>) =&gt;</span>
+    options =&gt; {</pre></div></div>
             
         </li>
         
@@ -346,24 +353,9 @@ send the data forward, bellow var i is current callback index being nested.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    options =&gt; {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-20">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
-              </div>
-              <p>check if options is object, the first iteration is always data obj, so skip it.</p>
-
-            </div>
-            
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(options !== data &amp;&amp; options === <span class="hljs-built_in">Object</span>(options)) {
         <span class="hljs-keyword">if</span>((!options.promise &amp;&amp; !options.inject) &amp;&amp; !options.quit)
-          <span class="hljs-keyword">throw</span> <span class="hljs-string">`<span class="hljs-subst">${options}</span> is not supported, valid fomat could be +n, -n, 0, or, {quit:+n}, {inject:+n,promise:Promise}`</span>
+          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`<span class="hljs-subst">${options}</span> is not supported, valid fomat could be +n, -n, 0, or, {quit:+n}, {inject:+n,promise:Promise}`</span>)
         <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(options.quit)
           quit = i + options.quit;
         <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(options.inject)
@@ -374,13 +366,13 @@ send the data forward, bellow var i is current callback index being nested.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>create temp que to hold our new que.</p>
+              <p>creates a temp que to hold our new que.</p>
 
             </div>
             
@@ -389,11 +381,11 @@ send the data forward, bellow var i is current callback index being nested.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>let <code>j</code> be the position we are skipping to.
 lets say <code>next(-3)</code> was passed, so <code>options = -3</code>.
@@ -413,17 +405,33 @@ so start at position 1, until the end.</p>
         </li>
         
         
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>sets the que to the one we just built.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.que = tmpQue;</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>set new que.</p>
+              <p>Apends the original data exposure callback.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.que = tmpQue;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.que.push(orig)
+        <span class="hljs-keyword">this</span>.executeQue(data);</pre></div></div>
             
         </li>
         
@@ -434,23 +442,7 @@ so start at position 1, until the end.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <p>Apend the original data exposure callback.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.que.push(orig)
-        <span class="hljs-keyword">this</span>.executeQue(data);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-25">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
-              </div>
-              <p>Make sure the current execution goes nowhere.</p>
+              <p>Makes sure the current execution goes nowhere.</p>
 
             </div>
             
@@ -461,14 +453,15 @@ so start at position 1, until the end.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
-              <p>if quit is specified, check if we need to quit
-and if so set next to resolve data, else increment checker.</p>
+              <p>if quit is specified, checks if we need to quit
+and if so sets <code>next</code> to resolve <code>data</code>, otherwise increments
+the checker variable.</p>
 
             </div>
             
@@ -480,15 +473,15 @@ and if so set next to resolve data, else increment checker.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <p>if inject is specified, check if we need to inject
-a promise if so set wait for resolve then call next,
-otherwise increment checker and call next.</p>
+              <p>if inject is specified, checks if we need to inject
+the <code>Promise</code> if so waits for promsise resolution and then
+calls <code>next</code>, otherwise increment checker and call next.</p>
 
             </div>
             
@@ -506,13 +499,13 @@ otherwise increment checker and call next.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>no special object options were specified just proceed.</p>
+              <p>no special object options were specified just proceeds.</p>
 
             </div>
             
@@ -523,23 +516,45 @@ otherwise increment checker and call next.</p>
         </li>
         
         
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>this sets our initial accumulator to the function done each successive call
+then creates another function callback nest where the old <code>done</code> becomes the callback
+of the new <code>done</code> the original <code>done</code> passed in here does nothing more then resolve the
+data. which is passed in immidiatle (our reduceRight returns the accumulator function)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  , done)(data);
+}</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>set our initial accumulator to function done.
-which merely resolves the data, exposing it.
-Meaning the result will be a function
-so call it instantly with data.</p>
+              <p><strong>enQue.run</strong> Creates a promise which resolves when the que ends.
+<code>que.run(data)</code> or for ques that dont consume data <code>que.run()</code>
+Since a promise is returns you should then call <code>.then(data=&gt;{})</code>
+and <code>.catch(error=&gt;{})</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  , done)(data);
-}
-
-enQue.prototype.run = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>enQue.prototype.run = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">this</span>.executeQue(data, () =&gt; resolve(data));
+    } <span class="hljs-keyword">catch</span>(error) {
+      reject(error);
+    }</pre></div></div>
             
         </li>
         
@@ -550,18 +565,11 @@ enQue.prototype.run = <span class="hljs-function"><span class="hljs-keyword">fun
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p>Returns a promise that resolves if the
-exection of the que yeilded no errors.</p>
+              <p><strong>returns a promise which can be used for chaining</strong></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-    <span class="hljs-keyword">try</span> {
-      <span class="hljs-keyword">this</span>.executeQue(data, () =&gt; resolve(data));
-    } <span class="hljs-keyword">catch</span>(error) {
-      reject(error);
-    }
-  })
+            <div class="content"><div class='highlight'><pre>  })
 }
 
 <span class="hljs-built_in">module</span>.exports = enQue;</pre></div></div>
