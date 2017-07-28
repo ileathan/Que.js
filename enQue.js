@@ -62,11 +62,13 @@ enQue.prototype.executeQue = function(data, done) {
   // Perform nesting.
   this.que.reduceRight((done, next) =>
     // Options can be any operation to perform while nesting callbacks.
-    // Currently options must be a type Number, 0 terminates que, and
-    // exposes the data immitiadtly. A negative Number sends the data
-    // to a new que backwards in the que, A positive Number sends the
-    // data forward, i is current callback index being nested.
+    // Currently options must be a specific Object, or a Number, if Object
+    // then it needs a quit or inject property. Otherwise 0 terminates que,
+    // exposing the data immitiadtly. A negative Number sends the data
+    // to backwards in the que (to a new que techincally), Positive Numbers
+    // send the data forward, bellow var i is current callback index being nested.
     options => {
+      // check if options is object, the first iteration is always data obj, so skip it.
       if(options !== data && options === Object(options)) {
         if((!options.promise && !options.inject) && !options.quit)
           throw `${options} is not supported, valid fomat could be +n, -n, 0, or, {quit:+n}, {inject:+n,promise:Promise}`
