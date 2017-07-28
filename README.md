@@ -47,7 +47,7 @@ que.add((data, next, done, index) => {
   setTimeout(()=>{
     data.msg += ' ONE';
     // You can inject a promise at a specified relative position.
-    next({inject:1, promise: new Promise((s,e)=>{data.msg += " ONE AND A HALF"; s(data) }) });
+    next({inject:1, promise: new Promise(s=>{data.msg += " ONE AND A HALF"; s(data)})});
   }, 9000)
 });
 que.add((data, next) => {
