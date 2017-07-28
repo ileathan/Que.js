@@ -1,12 +1,12 @@
-# Que.js
+# enQue.js
 Enable queing asynchronous functions one after the other.
 
 For example if you want to execute 5 asynchronous functions that all operate on the same data, or you just want them done in succession.
 Its as simple as
 
 ```javascript
-const Que = new require('Que')
-const myQue = Que([fn1, fn2, fn3, fn4, fn5])
+const enQue = new require('enQue')
+const myQue = enQue([fn1, fn2, fn3, fn4, fn5])
 myQue.run()
 ```
 
@@ -20,7 +20,7 @@ myQue.run()
 
 ```javascript
 // USAGE EXAMPLE
-const Que = require('Que');
+const Que = require('enQue');
 const que = new Que();
 
 // Used to only go backwards once, otherwise you end up in an infinite cycle.
