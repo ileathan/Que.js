@@ -5,7 +5,7 @@ Enable queing asynchronous functions one after the other.
 // USAGE EXAMPLE
 const que = new Que();
 var once = true;
-que.add(function(data, next, done, index) {
+que.add((data, next, done, index) => {
   //return done(); // You can return early if you'd like
   setTimeout(()=>{
     data.msg += ' ONE';
@@ -13,14 +13,14 @@ que.add(function(data, next, done, index) {
     next({inject:1, promise: new Promise((s,e)=>{data.msg += " ONE AND A HALF"; s(data) }) });
   }, 9000)
 });
-que.add(function(data, next) {
+que.add((data, next) => {
   setTimeout(()=>{
     //throw "errors work too" // You can throw an error and reject the promise
     data.msg += ' TWO';
     next();
   }, 4000)
 });
-que.add(function(data, next) {
+que.add((data, next) => {
   data.msg += ' THREE';
   next()
 });
