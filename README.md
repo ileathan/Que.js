@@ -10,6 +10,8 @@ const myQue = enQue([fn1, fn2, fn3, fn4, fn5])
 myQue.run(data)
 ```
 
+Then inside of each function call next() when its ready to proceed, optional parameters may be passed here aswell.
+
 However since a promise is returned and since usually you want to output some data it is better to always attach a `.then()` and `.catch()` so the above would become.
 
 ```javascript
