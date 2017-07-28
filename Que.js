@@ -1,20 +1,20 @@
-// Que CLASS
+// enQue class
 // Author leathan
 // License MIT
 'use strict'
 
-function Que() {
+function enQue() {
   this.que = [];
 }
 
-Que.prototype.fill = function(fn, times) {
+enQue.prototype.fill = function(fn, times) {
   for(let i = 0; i < times; i++) {
     this.que.push(fn);
   }
   return times;
 }
 
-Que.prototype.add = function(fn) {
+enQue.prototype.add = function(fn) {
   if(fn.constructor.name === 'Array') {
     let i = 0;
     for(i = 0; i < fn.length; i++) {
@@ -25,11 +25,11 @@ Que.prototype.add = function(fn) {
   return this.que.push(fn);
 }
 
-Que.prototype.clear = function(fn) {
+enQue.prototype.clear = function(fn) {
   return this.que = [];
 }
 
-Que.prototype.remove = function(item) {
+enQue.prototype.remove = function(item) {
   type = item.constructor.name;
   if(type === 'Number') {
     return this.que.splice(item, 1);
@@ -50,7 +50,7 @@ Que.prototype.remove = function(item) {
   }
 }
 
-Que.prototype.executeQue = function(data, done) {
+enQue.prototype.executeQue = function(data, done) {
   // Allow ques that dont need to consume data.
   if(!data) data = {};
   // preserve the original callback for potential que rebuilding.
@@ -127,7 +127,7 @@ Que.prototype.executeQue = function(data, done) {
   , done)(data);
 }
 
-Que.prototype.run = function(data) {
+enQue.prototype.run = function(data) {
   // Returns a promise that resolves if the
   // exection of the que yeilded no errors.
   return new Promise((resolve, reject) => {
@@ -139,4 +139,4 @@ Que.prototype.run = function(data) {
   })
 }
 
-module.exports = Que;
+module.exports = enQue;
