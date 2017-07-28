@@ -1,0 +1,27 @@
+{
+  "name": "enque",
+  "version": "1.0.2",
+  "description": "Run asynchonous functions in succession while potentially operating on the same data.",
+  "main": "enQue.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"This package has no test command.\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ileathan/enQue.git"
+  },
+  "keywords": [
+    "que",
+    "enque",
+    "mubot"
+  ],
+  "author": "leathan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ileathan/enQue/issues"
+  },
+  "homepage": "https://github.com/ileathan/enQue#readme"
+}

@@ -79,7 +79,7 @@ function myFn1(data, next) {
   else next(1);
 }
 
-function mFn2(data, next) {
+function myFn2(data, next) {
   data.msg += ' FIVE';
   next();
 }

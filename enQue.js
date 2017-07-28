@@ -27,7 +27,7 @@ enQue.prototype.add = function(fn) {
   if(fn.constructor.name === 'Array') {
     let l = fn.length
     for(let i = 0; i < l; i++) {
-      this.que.push(fn)
+      this.que.push(fn[i])
     }
     return l;
   }
@@ -76,7 +76,7 @@ enQue.prototype.executeQue = function(data, done) {
   var orig = done;
   // `i` is our iterator, quit/inject check if we need to quit/inject `Promise`.
   var i = 0, quit = false, inject = false;
-
+console.log(1)
   // Perform nesting.
   this.que.reduceRight((done, next) =>
     // Options can be any operation to perform while nesting callbacks.
