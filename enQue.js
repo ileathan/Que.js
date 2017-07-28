@@ -16,6 +16,8 @@ enQue.prototype.fill = function(fn, times) {
 }
 
 enQue.prototype.add = function(fn) {
+  // If argument is array loop through it
+  // adding every item to our que.
   if(fn.constructor.name === 'Array') {
     let i = 0;
     for(i = 0; i < fn.length; i++) {
@@ -30,17 +32,24 @@ enQue.prototype.clear = function(fn) {
   return this.que = [];
 }
 
-enQue.prototype.remove = function(item) {
+// item can be a string, function ref, or number.
+// amount is the amount of items to remove
+// if its not specified all items found are removed.
+enQue.prototype.remove = function(item, amount) {
   type = item.constructor.name;
+  // If item is a number just remove that element and return.
   if(type === 'Number') {
     return this.que.splice(item, 1);
   }
   else {
+    // Otherwise loop through the que and check each element
+    // returns array of removed functions.
     type === 'Function' ? check = item : check = item.toString();
     total = amount || Infinity;
     result = [];
     removed = 0;
     for(i=0; i<this.que.length; i++) {
+      // Done remove more than amount!
       if(total > amount) break;
       if(check === item) {
         result.push(this.que.splice(i, 1));
