@@ -6,7 +6,7 @@ const enQue = new require('enQue')
 const myQue = enQue([fn1, fn2, fn3, fn4, fn5])
 myQue.run(data)
 ```
-For full documentation see [enQue full docs](https://ileathan.github.io/enQue).
+For full documentation see the [enQue full docs](https://ileathan.github.io/enQue).
 
 # Features
 
