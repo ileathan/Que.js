@@ -1,5 +1,5 @@
 # enQue.js
-Enable queing asynchronous functions one after the other.
+Chain asynchronous functions in succession, comsuming the same data stream.
 
 ```javascript
 const enQue = new require('enQue')
