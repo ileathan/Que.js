@@ -9,6 +9,7 @@ que.add(function(data, next, done, index) {
   //return done(); // You can return early if you'd like
   setTimeout(()=>{
     data.msg += ' ONE';
+    // You can inject a promise at a specified relative position.
     next({inject:1, promise: new Promise((s,e)=>{data.msg += " ONE AND A HALF"; s(data) }) });
   }, 9000)
 });
@@ -25,7 +26,9 @@ que.add(function(data, next) {
 });
 que.add(function(data, next) {
   data.msg += ' FOUR';
+   // You can go backwards in the que.
    if(once) { once = false; next(-2); }
+   // You can go forwards in the que.
    else next(1);
 });
 que.add(function(data, next) {
