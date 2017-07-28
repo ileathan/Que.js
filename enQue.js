@@ -5,6 +5,7 @@
 
 function enQue() {
   this.que = [];
+  if(init) this.add(init);
 }
 
 enQue.prototype.fill = function(fn, times) {
