@@ -27,10 +27,10 @@ que.add((data, next) => {
 
 function myFn1(data, next) {
   data.msg += ' FOUR';
-   // You can go backwards in the que.
-   if(once) { once = false; next(-2); }
-   // You can go forwards in the que.
-   else next(1);
+  // You can go backwards in the que.
+  if(once) { once = false; next(-2); }
+  // You can go forwards in the que.
+  else next(1);
 }
 
 function mFn2(data, next) {
