@@ -1,8 +1,26 @@
 # Que.js
 Enable queing asynchronous functions one after the other.
 
+For example if you want to execute 5 asynchronous functions that all operate on the same data, or you just want them done in succession.
+Its as simple as
+
+```javascript
+const Que = new require('Que')
+const myQue = Que([fn1, fn2, fn3, fn4, fn5])
+myQue.run()
+```
+
+However since a promise is returned and since usually you want to output some data it is better to always attach a `.then()` and `.catch()` so the above would become.
+
+```javascript
+myQue.run()
+  .then(sucessCallback)
+  .catch(errorCallback)
+```
+
 ```javascript
 // USAGE EXAMPLE
+const Que = require('Que');
 const que = new Que();
 
 // Used to only go backwards once, otherwise you end up in an infinite cycle.
