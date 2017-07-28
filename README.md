@@ -6,16 +6,31 @@ const enQue = new require('enQue')
 const myQue = enQue([fn1, fn2, fn3, fn4, fn5])
 myQue.run(data)
 ```
-Thats how easy it would be to execute 5 asynchronous in functions in succession that all operate on the same data.
-Then inside of each function call `next()` to proceed to the next function, optional parameters may be passed here aswell.
+# Features
 
-However since a promise is returned and since usually you want to output some data it is better to always attach a `.then()` and `.catch()` so the above would become.
+1.) Skip ahead in the que `next(4)` would skip to position 4.
+
+2.) Go backwards in the que `next(-4)` would go back 4.
+
+3.) Inject a `Promise` at a particular que index.
+
+4.) Quit after at specified index `next({quit:4}` quits after 4 more iterations.
+
+The above code snippet illustrates how simple it would be to execute 5 asynchronous in functions in succession that all operate on the same data. Just make sure each function calls `next()` to proceed or `next(0)` to quit early.
+
+Since a promise is returned it is always best to attach a `.then()` and `.catch()` so the above code would become.
 
 ```javascript
 myQue.run()
   .then(sucessCallback)
   .catch(errorCallback)
 ```
+
+# Instalation
+
+```npm install enque```
+
+# Usage example
 
 ```javascript
 // USAGE EXAMPLE
