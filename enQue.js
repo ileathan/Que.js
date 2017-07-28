@@ -3,7 +3,7 @@
 // License MIT
 'use strict'
 
-function enQue() {
+function enQue(init) {
   this.que = [];
   if(init) this.add(init);
 }
