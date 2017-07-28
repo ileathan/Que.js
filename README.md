@@ -51,6 +51,7 @@ const que = new Que();
 var once = true;
 
 que.add((data, next, done, index) => {
+  // index is the position of your function int he que, 0 right now.
   //return done(); // You can return early if you'd like
   setTimeout(()=>{
     data.msg += ' ONE';
