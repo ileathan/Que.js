@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>enQue.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>enQue.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>enQue class
+Author leathan
+License MIT</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">enQue</span>(<span class="hljs-params">init</span>) </span>{
+  <span class="hljs-keyword">this</span>.que = [];
+  <span class="hljs-keyword">if</span>(init) <span class="hljs-keyword">this</span>.add(init);
+}
+
+enQue.prototype.fill = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fn, times</span>) </span>{
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; times; i++) {
+    <span class="hljs-keyword">this</span>.que.push(fn);
+  }
+  <span class="hljs-keyword">return</span> times;
+}
+
+enQue.prototype.add = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fn</span>) </span>{
+  <span class="hljs-keyword">if</span>(fn.constructor.name === <span class="hljs-string">'Array'</span>) {
+    <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>; i &lt; fn.length; i++) {
+      <span class="hljs-keyword">this</span>.que.push(fn)
+    }
+    <span class="hljs-keyword">return</span> i;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.que.push(fn);
+}
+
+enQue.prototype.clear = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fn</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.que = [];
+}
+
+enQue.prototype.remove = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">item</span>) </span>{
+  type = item.constructor.name;
+  <span class="hljs-keyword">if</span>(type === <span class="hljs-string">'Number'</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.que.splice(item, <span class="hljs-number">1</span>);
+  }
+  <span class="hljs-keyword">else</span> {
+    type === <span class="hljs-string">'Function'</span> ? check = item : check = item.toString();
+    total = amount || <span class="hljs-literal">Infinity</span>;
+    result = [];
+    removed = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-keyword">this</span>.que.length; i++) {
+      <span class="hljs-keyword">if</span>(total &gt; amount) <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">if</span>(check === item) {
+        result.push(<span class="hljs-keyword">this</span>.que.splice(i, <span class="hljs-number">1</span>));
+        removed++;
+      }
+    }
+    <span class="hljs-keyword">return</span> result;
+  }
+}
+
+enQue.prototype.executeQue = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data, done</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Allow ques that dont need to consume data.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span>(!data) data = {};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>preserve the original callback for potential que rebuilding.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> orig = done;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>i is our iterator, quit/inject check if we need to quit/inject Promise.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, quit = <span class="hljs-literal">false</span>, inject = <span class="hljs-literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Perform nesting.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.que.reduceRight(<span class="hljs-function">(<span class="hljs-params">done, next</span>) =&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Options can be any operation to perform while nesting callbacks.
+Currently options must be a specific Object, or a Number, if Object
+then it needs a quit or inject property. Otherwise 0 terminates que,
+exposing the data immitiadtly. A negative Number sends the data
+to backwards in the que (to a new que techincally), Positive Numbers
+send the data forward, bellow var i is current callback index being nested.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    options =&gt; {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>check if options is object, the first iteration is always data obj, so skip it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(options !== data &amp;&amp; options === <span class="hljs-built_in">Object</span>(options)) {
+        <span class="hljs-keyword">if</span>((!options.promise &amp;&amp; !options.inject) &amp;&amp; !options.quit)
+          <span class="hljs-keyword">throw</span> <span class="hljs-string">`<span class="hljs-subst">${options}</span> is not supported, valid fomat could be +n, -n, 0, or, {quit:+n}, {inject:+n,promise:Promise}`</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(options.quit)
+          quit = i + options.quit;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(options.inject)
+          inject = i + options.inject;
+      }
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(options !== data &amp;&amp; options) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>create temp que to hold our new que.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        tmpQue = [];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>let j be the position we are skipping to.
+lets say next(-3) was passed, so options = -3.
+i is the current que spot - 1 that called next(-3).
+lets say i was 5, so we want to go back to 1.
+so j = 5 + -3  - (options &lt; 0) = 1
+so start at position 1, until the end.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> j = i + options - (options &lt; <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">this</span>.que[j<span class="hljs-number">-1</span>]) <span class="hljs-keyword">throw</span> <span class="hljs-string">`<span class="hljs-subst">${options}</span> out of bounds, no que position <span class="hljs-subst">${j}</span> exists.`</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> l = <span class="hljs-keyword">this</span>.que.length; j &lt; l; j++) {
+          tmpQue.push(<span class="hljs-keyword">this</span>.que[j])
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>set new que.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.que = tmpQue;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Apend the original data exposure callback.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.que.push(orig)
+        <span class="hljs-keyword">this</span>.executeQue(data);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Make sure the current execution goes nowhere.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        done = <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{}
+        next = <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{}
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>if quit is specified, check if we need to quit
+and if so set next to resolve data, else increment checker.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(quit) {
+        <span class="hljs-keyword">if</span>(quit &gt; i) { next = orig; quit = <span class="hljs-literal">false</span> }
+        <span class="hljs-keyword">else</span> quit++
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>if inject is specified, check if we need to inject
+a promise if so set wait for resolve then call next,
+otherwise increment checker and call next.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(inject) {
+        <span class="hljs-keyword">if</span>(inject &gt; i) {
+          options.promise.then(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> {
+            next(done, data, orig, i++);
+          })
+        } <span class="hljs-keyword">else</span> {
+          inject++
+          next(done, data, orig, i++)
+        }
+      } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>no special object options were specified just proceed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        next(data, done, orig, i++)
+      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>set our initial accumulator to function done.
+which merely resolves the data, exposing it.
+Meaning the result will be a function
+so call it instantly with data.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  , done)(data);
+}
+
+enQue.prototype.run = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Returns a promise that resolves if the
+exection of the que yeilded no errors.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">this</span>.executeQue(data, () =&gt; resolve(data));
+    } <span class="hljs-keyword">catch</span>(error) {
+      reject(error);
+    }
+  })
+}
+
+<span class="hljs-built_in">module</span>.exports = enQue;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
