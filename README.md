@@ -1,15 +1,12 @@
 # enQue.js
 Enable queing asynchronous functions one after the other.
 
-For example if you want to execute 5 asynchronous functions that all operate on the same data, or you just want them done in succession.
-Its as simple as.
-
 ```javascript
 const enQue = new require('enQue')
 const myQue = enQue([fn1, fn2, fn3, fn4, fn5])
 myQue.run(data)
 ```
-
+Thats how easy it would be to execute 5 asynchronous in functions in succession that all operate on the same data.
 Then inside of each function call `next()` to proceed to the next function, optional parameters may be passed here aswell.
 
 However since a promise is returned and since usually you want to output some data it is better to always attach a `.then()` and `.catch()` so the above would become.
