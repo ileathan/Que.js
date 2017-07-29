@@ -114,8 +114,6 @@ enQue.prototype.remove = function(item, amount) {
 // bypass the promise system its avialable `que.executeQue()`
 // but remember to pass in `data` and `done` if needed.
 enQue.prototype.executeQue = function(data, done) {
-  // Allow ques that dont need to consume data.
-  if(!data) data = {};
   // preserve the original callback for potential que rebuilding.
   var orig = done;
   // `i` is our iterator, quit/inject check if we need to quit/inject `Function`.
@@ -201,6 +199,7 @@ enQue.prototype.executeQue = function(data, done) {
 // Since a promise is returns you should then call `.then(data=>{})`
 // and `.catch(error=>{})`
 enQue.prototype.run = function(data) {
+  // Allow ques that dont need to consume data.
   if(!data) data = {};
   return new Promise((resolve, reject) => {
     try {
