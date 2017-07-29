@@ -165,15 +165,17 @@ enQue.prototype.executeQue = function(data, done) {
         next = ()=>{}
       }
       // if quit is specified, checks if we need to quit
-      // and if so sets `next` to resolve `data`, otherwise increments
+      // and if so sets `next` to resolve `data`, otherwise de-increments
       // the checker variable.
       if(quit !== false) {
         if(quit === 0) { next = orig; quit = false }
         else quit--;
       }
       // if inject is specified, checks if we need to inject
-      // the `Function` if so waits for promsise resolution and then
-      // calls `next`, otherwise increment checker and call next.
+      // the `Function` if so waits it injects the function
+      // **which is NOT part of the que** and hence its execution is
+      // not synchronized, this will probably be fixed in the future.
+      // calls `next`, otherwise de-increments checker and calls `next`.
       if(inject !== false) {
         if(inject === 0) {
           next(data, done, i++, orig);
@@ -191,7 +193,7 @@ enQue.prototype.executeQue = function(data, done) {
   // this sets our initial accumulator to the function done each successive call
   // then creates another function callback nest where the old `done` becomes the callback
   // of the new `done` the original `done` passed in here does nothing more then resolve the
-  // data. which is passed in immidiatly since after nesting occurs the entire nest is executed.
+  // data. Which is passed in immidiatly since right after nesting the entire composition is executed.
   , done)(data);
 }
 
