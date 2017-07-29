@@ -3,8 +3,8 @@
 // License MIT
 'use strict'
 
-// **Constructor** Creates a new enQue object.
-// `que = new enQue([function1, function2, function3])`
+// **Constructor** Creates a new enQue object with the specified
+// functions. `que = new enQue([fn1, fn2, fn3])`
 // You can also create an empty object via `new enQue()`
 function enQue(init) {
   this.que = [];
@@ -14,7 +14,7 @@ function enQue(init) {
 }
 
 // **Compact** Removes undefined and null values.
-// This method should absalutely never be called
+// This method should never ever be called
 // directly, and it will probably become private
 // in the future.. but who knows. `que.compact()`
 enQue.prototype.compact = function() {
@@ -26,7 +26,7 @@ enQue.prototype.compact = function() {
   return this;
 }
 
-// **enQue.fill** Fills an enQue object with `fn` `n` times.
+// **enQue.fill** Fills an enQue object with `fn`'s `n` times.
 // `que.fill((_,n)=>{console.log('works');n()}, 7)`
 // running that que will display 'works' 7 times.
 enQue.prototype.fill = function(fn, n) {
@@ -119,7 +119,7 @@ enQue.prototype.executeQue = function(data, done) {
   // `i` is our iterator, `quit`  and `inject` are used to check if we need
   // to quit early and resolve the data, or inject `Function`.
   var i = 0, quit = false, inject = false, injectFn = false;
-  // The reduceRight function allows us to itterate through the que while constantly
+  // The `reduceRight` function allows us to itterate through the que while constantly
   // nesting callbacks using the accumulator, it has very reasonable performance.
   this.que.reduceRight((done, next) =>
     options => {
@@ -128,7 +128,7 @@ enQue.prototype.executeQue = function(data, done) {
       // then it needs a `quit` or `inject` property. Otherwise **0** terminates que,
       // exposing the data immitiadtly. A negative Number sends the data
       // to backwards in the que (to a new que **techincally**), Positive Numbers
-      // send the data forward, bellow var i is current callback index being nested.
+      // send the data forward, `i` is current callback index being nested.
       if(options === 0) return next = orig;
       if(options !== data && options === Object(options)) {
         if((!options.function && !options.inject) && !options.quit)
@@ -191,7 +191,7 @@ enQue.prototype.executeQue = function(data, done) {
   // this sets our initial accumulator to the function done each successive call
   // then creates another function callback nest where the old `done` becomes the callback
   // of the new `done` the original `done` passed in here does nothing more then resolve the
-  // data. which is passed in immidiatle (our reduceRight returns the accumulator function)
+  // data. which is passed in immidiatly since after nesting occurs the entire nest is executed.
   , done)(data);
 }
 

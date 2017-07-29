@@ -44,8 +44,8 @@ License MIT</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p><strong>Constructor</strong> Creates a new enQue object.
-<code>que = new enQue([function1, function2, function3])</code>
+              <p><strong>Constructor</strong> Creates a new enQue object with the specified
+functions. <code>que = new enQue([fn1, fn2, fn3])</code>
 You can also create an empty object via <code>new enQue()</code></p>
 
             </div>
@@ -80,7 +80,7 @@ You can also create an empty object via <code>new enQue()</code></p>
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p><strong>Compact</strong> Removes undefined and null values.
-This method should absalutely never be called
+This method should never ever be called
 directly, and it will probably become private
 in the future.. but who knows. <code>que.compact()</code></p>
 
@@ -117,7 +117,7 @@ in the future.. but who knows. <code>que.compact()</code></p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p><strong>enQue.fill</strong> Fills an enQue object with <code>fn</code> <code>n</code> times.
+              <p><strong>enQue.fill</strong> Fills an enQue object with <code>fn</code>‘s <code>n</code> times.
 <code>que.fill((_,n)=&gt;{console.log(&#39;works&#39;);n()}, 7)</code>
 running that que will display ‘works’ 7 times.</p>
 
@@ -401,7 +401,7 @@ to quit early and resolve the data, or inject <code>Function</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>The reduceRight function allows us to itterate through the que while constantly
+              <p>The <code>reduceRight</code> function allows us to itterate through the que while constantly
 nesting callbacks using the accumulator, it has very reasonable performance.</p>
 
             </div>
@@ -423,7 +423,7 @@ Currently options must be a specific <code>JSON Object</code>, or a <code>Number
 then it needs a <code>quit</code> or <code>inject</code> property. Otherwise <strong>0</strong> terminates que,
 exposing the data immitiadtly. A negative Number sends the data
 to backwards in the que (to a new que <strong>techincally</strong>), Positive Numbers
-send the data forward, bellow var i is current callback index being nested.</p>
+send the data forward, <code>i</code> is current callback index being nested.</p>
 
             </div>
             
@@ -603,7 +603,7 @@ calls <code>next</code>, otherwise increment checker and call next.</p>
               <p>this sets our initial accumulator to the function done each successive call
 then creates another function callback nest where the old <code>done</code> becomes the callback
 of the new <code>done</code> the original <code>done</code> passed in here does nothing more then resolve the
-data. which is passed in immidiatle (our reduceRight returns the accumulator function)</p>
+data. which is passed in immidiatly since after nesting occurs the entire nest is executed.</p>
 
             </div>
             
