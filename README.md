@@ -2,9 +2,9 @@
 Chain asynchronous functions in succession, consuming the same data stream.
 
 ```javascript
-const enQue = new require('enQue')
-const myQue = enQue([fn1, fn2, fn3, fn4, fn5])
-myQue.run(data)
+const enQue = new require('enQue');
+const myQue = enQue([fn1, fn2, fn3, fn4, fn5]);
+myQue.run(data);
 ```
 For full documentation see the [enQue source code](https://ileathan.github.io/enQue).
 
@@ -27,9 +27,9 @@ The above code snippet illustrates how simple it would be to execute 5 asynchron
 Since a promise is returned it is always best to attach a `.then()` and `.catch()` so the above code would become.
 
 ```javascript
-myQue.run()
-  .then(sucessCallback)
-  .catch(errorCallback)
+myQue.run();
+  .then(sucessCallback);
+  .catch(errorCallback);
 ```
 
 # Instalation
@@ -47,70 +47,79 @@ None.
 // When operating on the data it is important to remember that it must not be a primitive. If you must operate on just a primitive
 // set it to an attribute on an object. for example if you need to operate on a `Number` you can do `que.run({data.number=17})`.
 
-Que = require('enQue')
-que = new Que()
+Que = require('enQue');
+que = new Que();
 
 function fn1(data, next) {
- console.log(1)
- next()
+ console.log(1);
+ next();
 }
 function fn2(data, next) {
- console.log(2)
- next()
+ console.log(2);
+ next();
 }
 
-que.add(fn1)
-que.run() // 1
-que.clear()
+que.add(fn1);
+que.run(); // 1
+que.clear();
 
-que.add([fn1, fn1, fn1])
-que.run() // 1 1 1
-que.clear()
+que.add([fn1, fn1, fn1]);
+que.run(); // 1 1 1
+que.clear();
 
-que.fill(fn1, 7)
-que.run()
-que.clear() // 1 1 1 1 1 1 1 
+que.fill(fn1, 7);
+que.run();
+que.clear(); // 1 1 1 1 1 1 1 
 
-que.add([fn1, fn1, fn1])
-que.remove(fn1)
-que.run() // ""
+que.add([fn1, fn1, fn1]);
+que.remove(fn1);
+que.run(); // ""
 
-que.add([fn1, fn2, fn2, fn2])
-que.remove([fn1, fn2], 3) // for best preformance only pass in numbers i.e. `remove(0); remove(1); remove(2)`
-que.run() // 2
-que.clear()
+que.add([fn1, fn2, fn2, fn2]);
+que.remove([fn1, fn2], 3); // for best preformance only pass in numbers i.e. `remove(0); remove(1); remove(2)`
+que.run(); // 2
+que.clear();
 
-que.add([(d,n)=>n(5), fn1, fn1, fn1, fn1, fn1, fn1])
-que.run() // 1
-que.clear()
+que.add([(d,n)=>n(5), fn1, fn1, fn1, fn1, fn1, fn1]);
+que.run(); // 1
+que.clear();
 
-que.add([(d,n)=>n({quit:3}), fn1, fn1, fn1, fn2, fn2, fn2])
-que.run() // 1 1 1
-que.clear()
+que.add([(d,n)=>n({quit:3}), fn1, fn1, fn1, fn2, fn2, fn2]);
+que.run(); // 1 1 1
+que.clear();
 
-que.add((d,n,i)=>{console.log("hi"); n()})
-que.remove('(d,n,i)=>{console.log("hi"); n()}')
-que.run() // ""
+que.add((d,n,i)=>{console.log("hi"); n()});
+que.remove('(d,n,i)=>{console.log("hi"); n()}');
+que.run(); // ""
 
 fn5 = (data, next, index, done) => {
-  console.log(index)
-  index === 2 ? next(0) : next()
+  console.log(index);
+  index === 2 ? next(0) : next();
   // instead of next(0) you can use done()
 }
 
-que.add([fn5, fn5, fn5, fn5, fn5])
-que.run() // 0 1 2
-que.clear()
+que.add([fn5, fn5, fn5, fn5, fn5]);
+que.run(); // 0 1 2
+que.clear();
 
 fn3 = (data, next) => {
  data.data = "SEVEN";
  next();
 }
 
-que.add([(d,n)=>n({inject:5, function: function(d){d.data="7"}}), fn3, fn3, fn3, fn3, fn3])
-que.run().then(res=>console.log(res)) // d.data === 7
+que.add([(d,n)=>n({inject:5, function: function(d){d.data="7"}}), fn3, fn3, fn3, fn3, fn3]);
+que.run().then(res=>console.log(res)); // d.data === 7
 // To initialise the date use `run(data)` where data is an Object.
-que.clear()
+que.clear();
+
+function fn6(data, next, index) {
+  throw new Error("Woopsie!");
+  next();
+}
+
+que.add([fn6, fn6, fn6, fn6, fn6]);
+que.run().catch(e=>console.log(e)); // prints the thrown error.
+
 ```
 
 Executing the above code as is gives:
@@ -136,6 +145,12 @@ Executing the above code as is gives:
 1
 2
 { data: '7' }
+Error: Woopsie!
+    at fn6 (...)
+    at options (...)
+    at enQue.executeQue (...)
+    at ...
+    ...
 ```
 
 # More examples
