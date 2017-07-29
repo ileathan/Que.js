@@ -47,8 +47,8 @@ None.
 // When operating on data it is important to remember that the data must not be a primitive. If you must operate on just a primitive
 // set it to an attribute to an object. for example if you need to operate on a `Number` you can do `que.run({data.number=17})`.
 
-que = require('./enQue.js')
-que = new que()
+Que = require('enQue')
+que = new Que()
 
 function fn1(data, next) {
  console.log(1)
