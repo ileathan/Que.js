@@ -13,6 +13,19 @@ function enQue(init) {
   return this;
 }
 
+// **Compact** Removes undefined and null values.
+// This method should absalutely never be called
+// directly, and it will probably become private
+// in the future.. but who knows. `que.compact()`
+enQue.prototype.compact = function() {
+  var i = 0;
+  const res = [];
+  for (let val of this.que) if(val) res[i++] = val;
+  this.que = res;
+  // __returns itself for use in chaining__
+  return this;
+}
+
 // **enQue.fill** Fills an enQue object with `fn` `n` times.
 // `que.fill((_,n)=>{console.log('works');n()}, 7)`
 // running that que will display 'works' 7 times.
@@ -30,8 +43,10 @@ enQue.prototype.fill = function(fn, n) {
 enQue.prototype.add = function(fn) {
   if(fn.constructor.name === 'Array') {
     for(let i = 0, l = fn.length; i < l; i++) {
-      this.que.push(fn[i])
+      this.que.push(fn[i]);
     }
+  } else {
+    this.que.push(fn);
   }
   // __returns itself for use in chaining__
   return this;
@@ -39,50 +54,72 @@ enQue.prototype.add = function(fn) {
 
 // **enQue.clear** Clears all functions from the que
 // `que.clear()`
-enQue.prototype.clear = function(fn) {
+enQue.prototype.clear = function() {
+  this.que = [];
   return this;
   // __returns itself for use in chaining__
 }
 
 // **enQue.remove** Removes an item from the que.
 // `que.remove("(_,n,__,i)=>{console.log(i)}")`
-// `que.remove(fn1, 2)` or `que.remove(7)`
-// `item` can be a `String`, `Function ref`, or `Number`.
-// `amount` is the amount of found `item`'s to remove
-// if its not specified **all** `item`s found are removed.
+// `que.remove(fn1, 2)` removes 2 occurances of fn1
+// `que.remove(7)` removes the 8th function (0 indexed)
+//  to remove an array of function refs and/or strinfified functions.
+// `que.remove([fn1, "(_,n,__,i)=>{console.log(i)}", fn2])`
+// `que.remove([fn1, fn2, fn3], 2)` will only remove fn1 and fn2.
 enQue.prototype.remove = function(item, amount) {
   // Here we extract the items type.
-  type = item.constructor.name;
+  let type = item.constructor.name;
   if(type === 'Number') {
     return this.que.splice(item, 1);
+  }
+  else if(type === "Array") {
+    amount = amount || Infinity;
+    let removed = 0;
+    for(let i=0, l=item.length; i<l; i++) {
+      var check = item[i].constructor.name === 'Function' ? item[i] : item[i].toString();
+      for(let j=0, l2=this.que.length; j<l2; j++) {
+        // Make sure we dont remove more than amount!
+        if(removed === amount) break;
+        if(this.que[j] === check) {
+          delete this.que[j];
+          removed++;
+        }
+      }
+    }
+    // __returns itself after compacting for use in chaining__
+    return this.compact();
   }
   else {
     let check = type === 'Function' ? item : item.toString();
     amount = amount || Infinity;
     let removed = 0;
-    for(i=0; i<this.que.length; i++) {
+    for(let i=0, l=this.que.length; i<l; i++) {
       // Make sure we dont remove more than amount!
       if(removed === amount) break;
-      if(check === item) {
-        this.que.splice(i, 1);
+      if(check === check.constructor.name === 'Function' ? this.que[i] : this.que[i].toString()) {
+        delete this.que[i]
         removed++;
       }
     }
-    // __returns itself for use in chaining__
-    return this;
+    // __returns itself after compacting for use in chaining__
+    return this.compact();
   }
 }
 
 // **executeQue** Executes the que, you should not need to call
-// this function directly, but on the offchance you need to
+// this function directly, for example if `data` doesnt exist
+// you will not be able to consume/output properly.
+// `run` makes sure data exists. On the offchance you need to
 // bypass the promise system its avialable `que.executeQue()`
+// but remember to pass in `data` and `done` if needed.
 enQue.prototype.executeQue = function(data, done) {
   // Allow ques that dont need to consume data.
   if(!data) data = {};
   // preserve the original callback for potential que rebuilding.
   var orig = done;
-  // `i` is our iterator, quit/inject check if we need to quit/inject `Promise`.
-  var i = 0, quit = false, inject = false;
+  // `i` is our iterator, quit/inject check if we need to quit/inject `Function`.
+  var i = 0, quit = false, inject = false, injectFn = false;
   // The reduceRight function allows us to itterate through the que while constantly
   // nesting callbacks using the accumulator, it has very reasonable performance.
   this.que.reduceRight((done, next) =>
@@ -93,17 +130,21 @@ enQue.prototype.executeQue = function(data, done) {
       // exposing the data immitiadtly. A negative Number sends the data
       // to backwards in the que (to a new que **techincally**), Positive Numbers
       // send the data forward, bellow var i is current callback index being nested.
+      if(options === 0) return next = orig;
       if(options !== data && options === Object(options)) {
-        if((!options.promise && !options.inject) && !options.quit)
-          throw new Error(`${options} is not supported, valid fomat could be +n, -n, 0, or, {quit:+n}, {inject:+n,promise:Promise}`)
-        else if(options.quit)
-          quit = i + options.quit;
-        else if(options.inject)
-          inject = i + options.inject;
+        if((!options.function && !options.inject) && !options.quit)
+          throw new Error(`${options} is not supported, valid fomat could be +n, -n, 0, or, {quit:+n}, {inject:+n,function:Function}`)
+        else if(options.quit) {
+          quit = options.quit;
+        }
+        else if(options.inject) {
+          inject = options.inject - 1;
+          injectFn = options.function;
+        }
       }
       else if(options !== data && options) {
         // creates a temp que to hold our new que.
-        tmpQue = [];
+        let tmpQue = [];
         // let `j` be the position we are skipping to.
         // lets say `next(-3)` was passed, so `options = -3`.
         // `i` is the current que spot - 1 that called `next(-3)`.
@@ -127,25 +168,25 @@ enQue.prototype.executeQue = function(data, done) {
       // if quit is specified, checks if we need to quit
       // and if so sets `next` to resolve `data`, otherwise increments
       // the checker variable.
-      if(quit) {
-        if(quit > i) { next = orig; quit = false }
-        else quit++
+      if(quit !== false) {
+        if(quit === 0) { next = orig; quit = false }
+        else quit--;
       }
       // if inject is specified, checks if we need to inject
-      // the `Promise` if so waits for promsise resolution and then
+      // the `Function` if so waits for promsise resolution and then
       // calls `next`, otherwise increment checker and call next.
-      if(inject) {
-        if(inject > i) {
-          options.promise.then(data => {
-            next(done, data, orig, i++);
-          })
+      if(inject !== false) {
+        if(inject === 0) {
+          next(data, done, i++, orig);
+          injectFn(data);
+          injectFn = inject = false;
         } else {
-          inject++
-          next(done, data, orig, i++)
+          inject--;
+          next(data, done, i++, orig);
         }
       } else {
         // no special object options were specified just proceeds.
-        next(data, done, orig, i++)
+        next(data, done, i++, orig)
       }
     }
   // this sets our initial accumulator to the function done each successive call
@@ -160,6 +201,7 @@ enQue.prototype.executeQue = function(data, done) {
 // Since a promise is returns you should then call `.then(data=>{})`
 // and `.catch(error=>{})`
 enQue.prototype.run = function(data) {
+  if(!data) data = {};
   return new Promise((resolve, reject) => {
     try {
       this.executeQue(data, () => resolve(data));

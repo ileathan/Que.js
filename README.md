@@ -40,7 +40,105 @@ myQue.run()
 
 None.
 
-# Usage example
+# Usage examples
+
+```javascript
+// For the purpose of these examples, assume each function is asynchronous and you don't know when it will finish execution.
+// When operating on data it is important to remember that the data must not be a primitive. If you must operate on just a primitive
+// set it to an attribute to an object. for example if you need to operate on a `Number` you can do `que.run({data.number=17})`.
+
+que = require('./enQue.js')
+que = new que()
+
+function fn1(data, next) {
+ console.log(1)
+ next()
+}
+function fn2(data, next) {
+ console.log(2)
+ next()
+}
+
+que.add(fn1)
+que.run() // 1
+que.clear()
+
+que.add([fn1, fn1, fn1])
+que.run() // 1 1 1
+que.clear()
+
+que.fill(fn1, 7)
+que.run()
+que.clear() // 1 1 1 1 1 1 1 
+
+que.add([fn1, fn1, fn1])
+que.remove(fn1)
+que.run() // ""
+
+que.add([fn1, fn2, fn2, fn2])
+que.remove([fn1, fn2], 3) // for best preformance only pass in numbers i.e. `remove(0); remove(1); remove(2)`
+que.run() // 2
+que.clear()
+
+que.add([(d,n)=>n(5), fn1, fn1, fn1, fn1, fn1, fn1])
+que.run() // 1
+que.clear()
+
+que.add([(d,n)=>n({quit:3}), fn1, fn1, fn1, fn2, fn2, fn2])
+que.run() // 1 1 1
+que.clear()
+
+que.add((d,n,i)=>{console.log("hi"); n()})
+que.remove('(d,n,i)=>{console.log("hi"); n()}')
+que.run() // ""
+
+fn5 = (data, next, index, done) => {
+  console.log(index)
+  index === 2 ? next(0) : next()
+  // instead of next(0) you can use done()
+}
+
+que.add([fn5, fn5, fn5, fn5, fn5])
+que.run() // 0 1 2
+que.clear()
+
+fn3 = (data, next) => {
+ data.data = "SEVEN";
+ next();
+}
+
+que.add([(d,n)=>n({inject:5, function: function(d){d.data="7"}}), fn3, fn3, fn3, fn3, fn3])
+que.run().then(res=>console.log(res)) // d.data === 7
+// To initialise the date use `run(data)` where data is an Object.
+que.clear()
+```
+
+Executing the above code as is gives:
+
+```
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+2
+1
+1
+1
+1
+0
+1
+2
+{ data: '7' }
+```
+
+# More examples
 
 ```javascript
 // USAGE EXAMPLE
@@ -94,7 +192,7 @@ que.run({msg: 'ZERO'})
   .catch(err => console.log('Woopsie! ' + err))
 ```
 
-The above code when executed prints
+Executing the above code as is gives:
 
 ```
 ONE ONE AND A HALF TWO THREE FOUR TWO THREE FOUR FIVE
