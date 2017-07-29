@@ -44,8 +44,8 @@ None.
 
 ```javascript
 // For the purpose of these examples, assume each function is asynchronous and you don't know when it will finish execution.
-// When operating on data it is important to remember that the data must not be a primitive. If you must operate on just a primitive
-// set it to an attribute to an object. for example if you need to operate on a `Number` you can do `que.run({data.number=17})`.
+// When operating on the data it is important to remember that it must not be a primitive. If you must operate on just a primitive
+// set it to an attribute on an object. for example if you need to operate on a `Number` you can do `que.run({data.number=17})`.
 
 Que = require('enQue')
 que = new Que()
