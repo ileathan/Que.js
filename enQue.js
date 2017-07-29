@@ -116,7 +116,8 @@ enQue.prototype.remove = function(item, amount) {
 enQue.prototype.executeQue = function(data, done) {
   // preserve the original callback for potential que rebuilding.
   var orig = done;
-  // `i` is our iterator, quit/inject check if we need to quit/inject `Function`.
+  // `i` is our iterator, `quit`  and `inject` are used to check if we need
+  // to quit early and resolve the data, or inject `Function`.
   var i = 0, quit = false, inject = false, injectFn = false;
   // The reduceRight function allows us to itterate through the que while constantly
   // nesting callbacks using the accumulator, it has very reasonable performance.
