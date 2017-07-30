@@ -42,6 +42,8 @@ None.
 
 # Usage examples
 
+**NOTE** You can't actually call `que.run()` then `que.clear()` because the que may still be processing. You need to call. `que.run().then(()=>que.clear())`
+
 ```javascript
 // For the purpose of these examples, assume each function is asynchronous and you don't know when it will finish execution.
 // When operating on the data it is important to remember that it must not be a primitive. If you must operate on just a primitive
