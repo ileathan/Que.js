@@ -1,6 +1,6 @@
 {
   "name": "enque",
-  "version": "1.1.11",
+  "version": "1.2.0",
   "description": "Run asynchonous functions in succession while potentially operating on the same data.",
   "main": "enQue.js",
   "directories": {
