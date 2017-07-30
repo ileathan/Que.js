@@ -16,7 +16,7 @@ For full documentation see the [enQue full docs](https://ileathan.github.io/enQu
 
 **3.)** Inject a `Function` at a particular que index `next({inject:4,function:Function})`. __(runs parallel to que not sync'd)__
 
-**4.)** Quit after at specified amount of que spots `next({quit:4}` quits after 4 more iterations.
+**4.)** Quit after a specified amount of que spots `next({quit:4}` quits after 4 more iterations.
 
 **5.)** Allows removing functions by index, variable name, or raw text.
 
