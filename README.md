@@ -4,7 +4,7 @@ Chain asynchronous functions in succession, consuming the same data stream.
 ```javascript
 const enQue = new require('enQue');
 const myQue = enQue([fn1, fn2, fn3, fn4, fn5]);
-myQue.run(data);
+myQue.run(data).then(data=>YOUR_CALLBACK(data));
 ```
 For full documentation see the [enQue full docs](https://ileathan.github.io/enQue).
 
@@ -41,6 +41,8 @@ myQue.run();
 None.
 
 # Usage examples
+
+**NOTE** You can't actually call `que.run()` then `que.clear()` because the que may still be processing. You need to call. `que.run().then(()=>que.clear())` or to extract data from the processed que `que.run().then(data=>YOUR_CALLBACK(data))`
 
 ```javascript
 // For the purpose of these examples, assume each function is asynchronous and you don't know when it will finish execution.
