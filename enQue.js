@@ -219,11 +219,11 @@ enQue.prototype.run = function(data) {
 enQue.prototype.nest = function(callback, orig) {
   var que = this.que, pos = que.length - 1, nest;
   // Set the initial done to resolve(data).
-  nest = orig || que[pos--];
+  nest = orig;
   for (; pos >= 0; pos--) {
     // Now our original done is a callback.
     // which keeps being nested till pos == 0.
-    nest = callback(nest, que[pos], pos, que);
+    nest = callback(nest, que[pos]);
   }
   // __returns the fully nested object__
   return nest;

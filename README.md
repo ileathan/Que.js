@@ -59,6 +59,7 @@ que.add((data, next, done, index) => {
     data.msg += ' ONE';
     // You can inject a function at a specified relative position (it isnt added to the que, it runs parallel so careful here).
     //next({inject:7, function: function(data) {data.msg += " ONE AND A HALF";}}); // This would run that function after 7 more que'd fn's are done.
+    next()
   }, 9000)
 });
 que.add((data, next) => {
