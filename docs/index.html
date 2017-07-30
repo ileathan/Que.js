@@ -682,7 +682,7 @@ unless you know what you are doing. <code>que.nest()</code></p>
             </div>
             
             <div class="content"><div class='highlight'><pre>enQue.prototype.nest = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">callback, orig</span>) </span>{
-  <span class="hljs-keyword">var</span> que = <span class="hljs-keyword">this</span>.que, pos = que.length - <span class="hljs-number">1</span>, value;</pre></div></div>
+  <span class="hljs-keyword">var</span> que = <span class="hljs-keyword">this</span>.que, pos = que.length - <span class="hljs-number">1</span>, nest;</pre></div></div>
             
         </li>
         
@@ -697,7 +697,7 @@ unless you know what you are doing. <code>que.nest()</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  value = orig || que[pos--];
+            <div class="content"><div class='highlight'><pre>  nest = orig;
   <span class="hljs-keyword">for</span> (; pos &gt;= <span class="hljs-number">0</span>; pos--) {</pre></div></div>
             
         </li>
@@ -714,7 +714,7 @@ which keeps being nested till pos == 0.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    value = callback(value, que[pos], pos, que);
+            <div class="content"><div class='highlight'><pre>    nest = callback(nest, que[pos]);
   }</pre></div></div>
             
         </li>
@@ -730,7 +730,7 @@ which keeps being nested till pos == 0.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> value;
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> nest;
 };
 
 <span class="hljs-built_in">module</span>.exports = enQue;</pre></div></div>
