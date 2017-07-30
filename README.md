@@ -42,6 +42,67 @@ None.
 
 # Usage examples
 
+```javascript
+// USAGE EXAMPLE
+const Que = require('enQue');
+const que = new Que();
+
+// Used to only go backwards once, otherwise you end up in an infinite cycle.
+// IF YOU GO FORWARD IN THE QUE YOU CANNOT GO BACKWARDS TO A PLACE NOT ON THE NEW QUE
+// It will throw a error if you attempt to go forward then backwards.
+var once = true;
+
+que.add((data, next, done, index) => {
+  // index is the position of your function in the que, 0 right now.
+  //return done(); // You can return early if you'd like
+  setTimeout(()=>{
+    data.msg += ' ONE';
+    // You can inject a promise at a specified relative position.
+    next({inject:1, function: function(data) {data.msg += " ONE AND A HALF";}});
+  }, 9000)
+});
+que.add((data, next) => {
+  setTimeout(()=>{
+    //throw "errors work too" // You can throw an error and reject the promise
+    data.msg += ' TWO';
+    next();
+  }, 4000)
+});
+que.add((data, next) => {
+  data.msg += ' THREE';
+  next()
+});
+
+function myFn1(data, next) {
+  data.msg += ' FOUR';
+  // You can go backwards in the que.
+  if(once) { once = false; next(-2); }
+  // You can go forwards in the que.
+  else next(1);
+}
+
+function myFn2(data, next) {
+  data.msg += ' FIVE';
+  next();
+}
+
+// You can add multiple functions at a time.
+que.add([myFn1, myFn2]) 
+
+que.run({msg: 'ZERO'})
+  .then(res => console.log(res.msg))
+  .catch(err => console.log('Woopsie! ' + err))
+```
+
+Executing the above code as is gives:
+
+```
+ONE ONE AND A HALF TWO THREE FOUR TWO THREE FOUR FIVE
+```
+
+
+# More examples
+
 **NOTE** You can't actually call `que.run()` then `que.clear()` because the que may still be processing. You need to call. `que.run().then(()=>que.clear())` or to extract data from the processed que `que.run().then(data=>YOUR_CALLBACK(data))`
 
 ```javascript
@@ -111,7 +172,7 @@ fn3 = (data, next) => {
 
 que.add([(d,n)=>n({inject:5, function: function(d){d.data="7"}}), fn3, fn3, fn3, fn3, fn3]);
 que.run().then(res=>console.log(res)); // d.data === 7
-// To initialise the date use `run(data)` where data is an Object.
+// To initialise the data use `run(data)` where data is an Object.
 que.clear();
 
 function fn6(data, next, index) {
@@ -153,64 +214,4 @@ Error: Woopsie!
     at enQue.executeQue (...)
     at ...
     ...
-```
-
-# More examples
-
-```javascript
-// USAGE EXAMPLE
-const Que = require('enQue');
-const que = new Que();
-
-// Used to only go backwards once, otherwise you end up in an infinite cycle.
-// IF YOU GO FORWARD IN THE QUE YOU CANNOT GO BACKWARDS TO A PLACE NOT ON THE NEW QUE
-// It will throw a error if you attempt to go forward then backwards.
-var once = true;
-
-que.add((data, next, done, index) => {
-  // index is the position of your function in the que, 0 right now.
-  //return done(); // You can return early if you'd like
-  setTimeout(()=>{
-    data.msg += ' ONE';
-    // You can inject a promise at a specified relative position.
-    next({inject:1, function: function(data) {data.msg += " ONE AND A HALF";}});
-  }, 9000)
-});
-que.add((data, next) => {
-  setTimeout(()=>{
-    //throw "errors work too" // You can throw an error and reject the promise
-    data.msg += ' TWO';
-    next();
-  }, 4000)
-});
-que.add((data, next) => {
-  data.msg += ' THREE';
-  next()
-});
-
-function myFn1(data, next) {
-  data.msg += ' FOUR';
-  // You can go backwards in the que.
-  if(once) { once = false; next(-2); }
-  // You can go forwards in the que.
-  else next(1);
-}
-
-function myFn2(data, next) {
-  data.msg += ' FIVE';
-  next();
-}
-
-// You can add multiple functions at a time.
-que.add([myFn1, myFn2]) 
-
-que.run({msg: 'ZERO'})
-  .then(res => console.log(res.msg))
-  .catch(err => console.log('Woopsie! ' + err))
-```
-
-Executing the above code as is gives:
-
-```
-ONE ONE AND A HALF TWO THREE FOUR TWO THREE FOUR FIVE
 ```
