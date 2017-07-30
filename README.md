@@ -22,7 +22,7 @@ For full documentation see the [enQue full docs](https://ileathan.github.io/enQu
 
 **6.)** A fill method for convenience.
 
-The above code snippet illustrates how simple it would be to execute 5 asynchronous functions in succession that all operate on the same data. When you add a function to the que  **accept the second a parameter** (data is first) and call it **make sure to call it** for example `FUNCTION_NAME(data, next) { /* example: */ data.size + 1; /* MANDATORY */ next() }`. You can also use `next(0)` to quit early. The entire point of this package is that each spot in the que wont run untill the last spot has said ok im done via calling `next()`, or whatever you chose to name it.
+The above code snippet illustrates how simple it would be to execute 5 asynchronous functions in succession that all operate on the same data. When you add a function to the que  **accept the second a parameter** (data is first) and **make sure to call it** for example `FUNCTION_NAME(data, next) { /* example: */ data.size + 1; /* MANDATORY */ next() }`. You can also use `next(0)` to quit early. The entire point of this package is that each spot in the que wont run untill the last spot has said ok im done via calling `next()`, or whatever you chose to name it.
 
 Since a promise is returned it is always best to attach a `.then()` and `.catch()` so the above code would become.
 
