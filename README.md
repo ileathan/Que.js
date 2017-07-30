@@ -4,8 +4,8 @@ Chain asynchronous functions in succession, consuming the same data stream.
 ```javascript
 const Que = new require('enQue');
 Que([fn1, fn2, fn3, fn4, fn5]).run(data).then(data=>YOUR_CALLBACK(data));
- // Where each fn follows the format fn(data, next) { /*example: */ data.size++; next() } 
- // data must be an OBJECT! ie: myQue.run({text:"Hi"}) then in your callback its data.text
+// Where each fn follows the format fn(data, next) { /*example: */ data.size++; next() } 
+// data must be an OBJECT! ie: myQue.run({text:"Hi"}) then in your callback its data.text
 ```
 For full documentation see the [enQue full docs](https://ileathan.github.io/enQue).
 
