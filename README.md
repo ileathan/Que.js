@@ -27,7 +27,7 @@ The above code snippet illustrates how simple it would be to execute 5 asynchron
 Since a promise is returned it is always best to attach a `.then()` and `.catch()` so the above code would become.
 
 ```javascript
-myQue.run(data);
+myQue.run(data)
   .then(sucessCallback); // Passed 1 argument, the data OBJECT.
   .catch(errorCallback); // Passed 1 argument, the error.
 ```
