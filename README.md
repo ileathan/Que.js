@@ -42,7 +42,7 @@ None.
 
 # Usage examples
 
-**NOTE** You can't actually call `que.run()` then `que.clear()` because the que may still be processing. You need to call. `que.run().then(()=>que.clear())`
+**NOTE** You can't actually call `que.run()` then `que.clear()` because the que may still be processing. You need to call. `que.run().then(()=>que.clear())` or to extract data from the processed que `que.run().then(data=>YOUR_CALLBACK(data))`
 
 ```javascript
 // For the purpose of these examples, assume each function is asynchronous and you don't know when it will finish execution.
