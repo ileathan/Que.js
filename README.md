@@ -58,7 +58,7 @@ que.add((data, next, done, index) => {
   setTimeout(()=>{
     data.msg += ' ONE';
     // You can inject a function at a specified relative position (it isnt added to the que, it runs parallel so careful here).
-    next({inject:1, function: function(data) {data.msg += " ONE AND A HALF";}});
+    //next({inject:1, function: function(data) {data.msg += " ONE AND A HALF";}});
   }, 9000)
 });
 que.add((data, next) => {
@@ -97,7 +97,7 @@ que.run({msg: 'ZERO'})
 Executing the above code as is gives:
 
 ```
-ONE ONE AND A HALF TWO THREE FOUR TWO THREE FOUR FIVE
+ONE TWO THREE FOUR TWO THREE FOUR FIVE
 ```
 
 
