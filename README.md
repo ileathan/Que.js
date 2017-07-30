@@ -57,7 +57,7 @@ que.add((data, next, done, index) => {
   //return done(); // You can return early if you'd like
   setTimeout(()=>{
     data.msg += ' ONE';
-    // You can inject a promise at a specified relative position.
+    // You can inject a function at a specified relative position (it isnt added to the que, it runs parallel so careful here).
     next({inject:1, function: function(data) {data.msg += " ONE AND A HALF";}});
   }, 9000)
 });
