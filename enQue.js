@@ -217,16 +217,16 @@ enQue.prototype.run = function(data) {
 // ***enQue.nest*** This method should never be called directly
 // unless you know what you are doing. `que.nest()`
 enQue.prototype.nest = function(callback, orig) {
-  var que = this.que, pos = que.length - 1, value;
+  var que = this.que, pos = que.length - 1, nest;
   // Set the initial done to resolve(data).
-  value = orig || que[pos--];
+  nest = orig || que[pos--];
   for (; pos >= 0; pos--) {
     // Now our original done is a callback.
     // which keeps being nested till pos == 0.
-    value = callback(value, que[pos], pos, que);
+    nest = callback(nest, que[pos], pos, que);
   }
   // __returns the fully nested object__
-  return value;
+  return nest;
 };
 
 module.exports = enQue;
