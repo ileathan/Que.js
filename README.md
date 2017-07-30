@@ -28,7 +28,7 @@ Since a promise is returned it is always best to attach a `.then()` and `.catch(
 
 ```javascript
 myQue.run();
-  .then(sucessCallback); // Passed 1 argument, the data object.
+  .then(sucessCallback); // Passed 1 argument, the data OBJECT.
   .catch(errorCallback); // Passed 1 argument, the error.
 ```
 
