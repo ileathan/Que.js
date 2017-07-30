@@ -119,8 +119,8 @@ enQue.prototype.executeQue = function(data, done) {
   // `i` is our iterator, `quit`  and `inject` are used to check if we need
   // to quit early and resolve the data, or inject `Function`.
   var i = 0, quit = false, inject = false, injectFn = false;
-  // The `reduceRight` function allows us to itterate through the que while constantly
-  // nesting callbacks using the accumulator, it has very reasonable performance.
+  // The `nest` function allows us to itterate through the que while constantly
+  // nesting callbacks.
   this.nest((done, next) =>
     options => {
       // Options can be any operation to perform while nesting callbacks.

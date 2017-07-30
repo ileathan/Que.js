@@ -401,12 +401,12 @@ to quit early and resolve the data, or inject <code>Function</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>The <code>reduceRight</code> function allows us to itterate through the que while constantly
-nesting callbacks using the accumulator, it has very reasonable performance.</p>
+              <p>The <code>nest</code> function allows us to itterate through the que while constantly
+nesting callbacks.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.que.reduceRight(<span class="hljs-function">(<span class="hljs-params">done, next</span>) =&gt;</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.nest(<span class="hljs-function">(<span class="hljs-params">done, next</span>) =&gt;</span>
     options =&gt; {</pre></div></div>
             
         </li>
@@ -538,7 +538,7 @@ so start at position 1, until the end.</p>
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>if quit is specified, checks if we need to quit
-and if so sets <code>next</code> to resolve <code>data</code>, otherwise increments
+and if so sets <code>next</code> to resolve <code>data</code>, otherwise de-increments
 the checker variable.</p>
 
             </div>
@@ -558,8 +558,10 @@ the checker variable.</p>
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>if inject is specified, checks if we need to inject
-the <code>Function</code> if so waits for promsise resolution and then
-calls <code>next</code>, otherwise increment checker and call next.</p>
+the <code>Function</code> if so waits it injects the function
+<strong>which is NOT part of the que</strong> and hence its execution is
+not synchronized, this will probably be fixed in the future.
+calls <code>next</code>, otherwise de-increments checker and calls <code>next</code>.</p>
 
             </div>
             
@@ -603,7 +605,7 @@ calls <code>next</code>, otherwise increment checker and call next.</p>
               <p>this sets our initial accumulator to the function done each successive call
 then creates another function callback nest where the old <code>done</code> becomes the callback
 of the new <code>done</code> the original <code>done</code> passed in here does nothing more then resolve the
-data. which is passed in immidiatly since after nesting occurs the entire nest is executed.</p>
+data. Which is passed in immidiatly since right after nesting the entire composition is executed.</p>
 
             </div>
             
@@ -663,7 +665,73 @@ and <code>.catch(error=&gt;{})</code></p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  })
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p><strong><em>enQue.nest</em></strong> This method should never be called directly
+unless you know what you are doing. <code>que.nest()</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>enQue.prototype.nest = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">callback, orig</span>) </span>{
+  <span class="hljs-keyword">var</span> que = <span class="hljs-keyword">this</span>.que, pos = que.length - <span class="hljs-number">1</span>, value;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Set the initial done to resolve(data).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  value = orig || que[pos--];
+  <span class="hljs-keyword">for</span> (; pos &gt;= <span class="hljs-number">0</span>; pos--) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Now our original done is a callback.
+which keeps being nested till pos == 0.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    value = callback(value, que[pos], pos, que);
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p><strong>returns the fully nested object</strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> value;
+};
 
 <span class="hljs-built_in">module</span>.exports = enQue;</pre></div></div>
             
