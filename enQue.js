@@ -42,7 +42,7 @@ enQue.prototype.fill = function(fn, n) {
 // specify an array of functions `que.add([fn1, fn1])`
 enQue.prototype.add = function(fn) {
   if(fn.constructor.name === 'Array') {
-    for(let i = 0, l = fn.length; i < l; i++) {
+    for(let i = 0, l = fn.length; i < l; ++i {
       this.que.push(fn[i]);
     }
   } else {
@@ -76,9 +76,9 @@ enQue.prototype.remove = function(item, amount) {
   else if(type === "Array") {
     amount = amount || Infinity;
     let removed = 0;
-    for(let i=0, l=item.length; i<l; i++) {
+    for(let i = 0, l = item.length; i < l; ++i) {
       var check = item[i].constructor.name === 'Function' ? item[i] : item[i].toString();
-      for(let j=0, l2=this.que.length; j<l2; j++) {
+      for(let j = 0, l = this.que.length; j < l; ++j {
         // Make sure we dont remove more than amount!
         if(removed === amount) break;
         if(this.que[j] === check) {
@@ -94,12 +94,12 @@ enQue.prototype.remove = function(item, amount) {
     let check = type === 'Function' ? item : item.toString();
     amount = amount || Infinity;
     let removed = 0;
-    for(let i=0, l=this.que.length; i<l; i++) {
+    for(let i = 0, l = this.que.length; i < l; ++i {
       // Make sure we dont remove more than amount!
       if(removed === amount) break;
       if(check === check.constructor.name === 'Function' ? this.que[i] : this.que[i].toString()) {
         delete this.que[i]
-        removed++;
+        ++removed;
       }
     }
     // __returns itself after compacting for use in chaining__
@@ -152,7 +152,7 @@ enQue.prototype.executeQue = function(data, done) {
         // so start at position 1, until the end.
         var j = i + options - (options < 0);
         if(!this.que[j-1]) throw `${options} out of bounds, no que position ${j} exists.`
-        for(let l = this.que.length; j < l; j++) {
+        for(let l = this.que.length; j < l; ++j) {
           tmpQue.push(this.que[j])
         }
         // sets the que to the one we just built.
@@ -169,7 +169,7 @@ enQue.prototype.executeQue = function(data, done) {
       // the checker variable.
       if(quit !== false) {
         if(quit === 0) { next = orig; quit = false }
-        else quit--;
+        else --quit;
       }
       // if inject is specified, checks if we need to inject
       // the `Function` if so waits it injects the function
@@ -178,16 +178,16 @@ enQue.prototype.executeQue = function(data, done) {
       // calls `next`, otherwise de-increments checker and calls `next`.
       if(inject !== false) {
         if(inject === 0) {
-          next(data, done, i++, orig);
+          next(data, done, ++i, orig);
           injectFn(data);
           injectFn = inject = false;
         } else {
-          inject--;
-          next(data, done, i++, orig);
+          --inject;
+          next(data, done, ++i, orig);
         }
       } else {
         // no special object options were specified just proceeds.
-        next(data, done, i++, orig)
+        next(data, done, ++i, orig)
       }
     }
   // this sets our initial accumulator to the function done each successive call
@@ -217,12 +217,12 @@ enQue.prototype.run = function(data) {
 // ***enQue.nest*** This method should never be called directly
 // unless you know what you are doing. `que.nest()`
 enQue.prototype.nest = function(callback, orig) {
-  var que = this.que, pos = que.length - 1, nest;
+  var que = this.que, pos = que.length, nest;
   // Set the initial done to resolve(data).
   nest = orig;
-  for (; pos >= 0; pos--) {
+  while(pos--) {
     // Now our original done is a callback.
-    // which keeps being nested till pos == 0.
+    // which keeps being nested till pos == 0 (inclusive).
     nest = callback(nest, que[pos]);
   }
   // __returns the fully nested object__
