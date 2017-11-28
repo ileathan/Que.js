@@ -19,7 +19,7 @@ For full documentation see the [enQue full docs](https://ileathan.github.io/enQu
 
 **4.)** Quit after a specified amount of que spots `next({quit:4})` quits after 4 more iterations.
 
-**5.)** Allows removing functions from the que by index, variable name, or raw text.
+**5.)** Allows removing functions from the que by index, variable name, or raw strings (experimental regex's).
 
 **6.)** A fill method for convenience.
 
